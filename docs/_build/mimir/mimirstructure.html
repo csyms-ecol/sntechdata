@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIMIR database structure and setup &#8212; SafetyNet Tech data analytics manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How many trawls do we need to sample to make sure we can detect a biologically important effect?" href="../power/trialpower.html" />
+    <link rel="prev" title="SafetyNet Technologies data analytics manifesto" href="../landing-page.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/safetynet_logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">SafetyNet Tech data analytics manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../landing-page.html">
+   SafetyNet Technologies data analytics manifesto
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  MIMIR database
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   MIMIR database structure and setup
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Trial design and statistical power
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../power/trialpower.html">
+   How many trawls do we need to sample to make sure we can detect a biologically important effect?
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/mimir/mimirstructure.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://csyms-ecol.github.io/sntechdata"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://csyms-ecol.github.io/sntechdata/issues/new?title=Issue%20on%20page%20%2Fmimir/mimirstructure.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#background">
+   Background
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#structure">
+   Structure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generating-the-database">
+   Generating the database
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="mimir-database-structure-and-setup">
+<h1>MIMIR database structure and setup<a class="headerlink" href="#mimir-database-structure-and-setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>The database, associated R shiny interface and introduction to MIMIR were developed by Shu En Lim with subsequent modification and tweaking by Craig Syms.</p>
+<p><strong>MIMIR</strong>, named after the Norse god of knowledge and wisdom, is SNTech’s data analysis tool for bycatch reduction. MIMIR aims to consolidate data across the fishing sector to enable fisheries to make better decisions especially in gear selection and placement of bycatch reduction devices. Why? Potentially useful data is scattered amongst journal articles, logbooks and images that are difficult or expensive to access, particularly for users outside the field. Another challenge is in bridging together knowledge from diverse sectors including biology, engineering and business. This version is a database of past scientific trials using light as a bycatch reduction tool, and visual physiology measurements of species from interest (Dr Sara Mynott).</p>
+</div>
+<div class="section" id="structure">
+<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
+<p>The database is comprised of four tables in a relational database (RDBMS). This will eventually be stored on a MySQL database on SNTech’s virtual server.</p>
+<p>The general organisation is:</p>
+<div class="figure align-default">
+<img alt="../_images/mimirtablestructure.png" src="../_images/mimirtablestructure.png" />
+</div>
+<p><strong>PK</strong> refers to a data field’s designation as a Primary Key.<br />
+Note also the links between Primary keys of the different tables. You will see this in the CREATE TABLE statements below in the REFERENCES table(key) syntax. This does the hierarchical linking of tables with each other.</p>
+</div>
+<div class="section" id="generating-the-database">
+<h2>Generating the database<a class="headerlink" href="#generating-the-database" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to repeatably generate a database <em>de novo</em> is by coding it directly using SQL. It is possible to use a graphical interface such as <a class="reference external" href="https://www.phpmyadmin.net/">phpMyAdmin</a>, but click and point interfaces are prone to (human) errors.</p>
+<p><strong>The procedure is:</strong></p>
+<ol class="simple">
+<li><p><strong>Secure shell into the Ionos server</strong></p></li>
+<li><p><strong>Log into MySQL</strong></p></li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This will change when I set the MySQL permissions. Using root login is dangerous!</p>
+</div>
+<p>In the command window</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mysql</span> <span class="o">-</span><span class="n">u</span> <span class="n">root</span> <span class="o">-</span><span class="n">p</span>  
+</pre></div>
+</div>
+<p>This will bring up the MySQL cursor.</p>
+<ol class="simple">
+<li><p>Now we run the code:</p></li>
+</ol>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="o">#</span><span class="n">MYSQL</span> <span class="n">MIMIR</span> <span class="k">DATABASE</span>
+<span class="o">#</span><span class="n">MAINTAINER</span><span class="p">:</span> <span class="n">CRAIG</span> <span class="n">SYMS</span><span class="p">,</span> <span class="n">CRAIG</span><span class="o">@</span><span class="n">SNTECH</span><span class="p">.</span><span class="n">CO</span><span class="p">.</span><span class="n">UK</span>
+<span class="o">#</span><span class="n">ORIGINAL</span> <span class="n">CODE</span><span class="p">:</span> <span class="n">SHU</span> <span class="n">EN</span> <span class="n">LIM</span>
+
+<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">mimir</span><span class="p">;</span>
+
+<span class="k">SHOW</span> <span class="n">DATABASES</span><span class="p">;</span>
+
+<span class="n">USE</span> <span class="n">mimir</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">fishes</span><span class="p">(</span>
+    <span class="n">species_id</span> <span class="nb">serial</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">genus_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">species_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">common_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">category</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
+    <span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">trials</span><span class="p">(</span>
+    <span class="n">trial_id</span> <span class="nb">serial</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">trial_year</span> <span class="nb">smallint</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">country</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">locality</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="k">source</span> <span class="nb">text</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">first_author</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">contact_author</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+    <span class="n">notes</span> <span class="nb">text</span>
+    <span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">experiments</span><span class="p">(</span>
+    <span class="n">experiment_id</span> <span class="nb">serial</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">trial_id</span> <span class="nb">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">REFERENCES</span> <span class="n">trials</span><span class="p">(</span><span class="n">trial_id</span><span class="p">),</span>
+    <span class="n">geog</span> <span class="n">POINT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">exp_type</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">gear_type</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">gear_modification</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">light_source</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">light_manufacturer</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>	
+    <span class="n">light_source_location</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">num_light_sources</span> <span class="nb">smallint</span><span class="p">,</span>
+    <span class="n">time_of_day</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">deployment_depth_start</span> <span class="nb">smallint</span><span class="p">,</span>
+    <span class="n">deployment_depth_end</span> <span class="nb">smallint</span><span class="p">,</span>
+    <span class="n">exp_date_start</span> <span class="nb">DATE</span><span class="p">,</span>
+    <span class="n">exp_date_end</span> <span class="nb">DATE</span>
+    <span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">results</span><span class="p">(</span>
+    <span class="n">result_id</span> <span class="nb">serial</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">experiment_id</span> <span class="nb">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">REFERENCES</span> <span class="n">experiments</span><span class="p">(</span><span class="n">experiment_id</span><span class="p">),</span>
+    <span class="n">trial_id</span> <span class="nb">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">REFERENCES</span> <span class="n">trials</span><span class="p">(</span><span class="n">trial_id</span><span class="p">),</span>
+    <span class="n">species_id</span> <span class="nb">integer</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">REFERENCES</span> <span class="n">fishes</span><span class="p">(</span><span class="n">species_id</span><span class="p">),</span>
+    <span class="n">catch_type</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span>
+    <span class="n">colour_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">colour_wavelength</span> <span class="nb">smallint</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">colour_wavelength_end</span> <span class="nb">smallint</span><span class="p">,</span>
+    <span class="n">response</span> <span class="nb">boolean</span><span class="p">,</span>
+    <span class="n">response_type</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+    <span class="p">);</span>
+</pre></div>
+</div>
+<p>We have now generated an empty database. Currently, there are only experiments from 12 studies, so it is expedient to enter them directly using SQL code:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">fishes</span> <span class="k">VALUES</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;Gadus&#39;</span><span class="p">,</span><span class="s1">&#39;morhua&#39;</span><span class="p">,</span><span class="s1">&#39;cod&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;Melanogrammus&#39;</span><span class="p">,</span><span class="s1">&#39;aeglefinus&#39;</span><span class="p">,</span><span class="s1">&#39;haddock&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;Merlangius&#39;</span><span class="p">,</span><span class="s1">&#39;merlangus&#39;</span><span class="p">,</span><span class="s1">&#39;whiting&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Pandalus&#39;</span><span class="p">,</span><span class="s1">&#39;borealis&#39;</span><span class="p">,</span><span class="s1">&#39;deepwater shrimp&#39;</span><span class="p">,</span><span class="s1">&#39;crustacean&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;Hippoglossoides&#39;</span><span class="p">,</span><span class="s1">&#39;platessoides&#39;</span><span class="p">,</span><span class="s1">&#39;american plaice&#39;</span><span class="p">,</span><span class="s1">&#39;flatfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;Meganyctiphanes&#39;</span><span class="p">,</span><span class="s1">&#39;norvegica&#39;</span><span class="p">,</span><span class="s1">&#39;northern krill&#39;</span><span class="p">,</span><span class="s1">&#39;crustacean&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="s1">&#39;Limanda&#39;</span><span class="p">,</span><span class="s1">&#39;limanda&#39;</span><span class="p">,</span><span class="s1">&#39;common dab&#39;</span><span class="p">,</span><span class="s1">&#39;flatfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;Pleuronectes&#39;</span><span class="p">,</span><span class="s1">&#39;platessa&#39;</span><span class="p">,</span><span class="s1">&#39;european plaice&#39;</span><span class="p">,</span><span class="s1">&#39;flatfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;Nephrops&#39;</span><span class="p">,</span><span class="s1">&#39;norvegicus&#39;</span><span class="p">,</span><span class="s1">&#39;norway lobster&#39;</span><span class="p">,</span><span class="s1">&#39;crustacean&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;Aequipecten&#39;</span><span class="p">,</span><span class="s1">&#39;opercularis&#39;</span><span class="p">,</span><span class="s1">&#39;queen scallop&#39;</span><span class="p">,</span><span class="s1">&#39;mollusk&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;Microstomus&#39;</span><span class="p">,</span><span class="s1">&#39;kitt&#39;</span><span class="p">,</span><span class="s1">&#39;lemon sole&#39;</span><span class="p">,</span><span class="s1">&#39;flatfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;Merluccius&#39;</span><span class="p">,</span><span class="s1">&#39;merluccius&#39;</span><span class="p">,</span><span class="s1">&#39;european hake&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;Micromesistius&#39;</span><span class="p">,</span><span class="s1">&#39;poutassou&#39;</span><span class="p">,</span><span class="s1">&#39;blue whiting&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="s1">&#39;Trachurus&#39;</span><span class="p">,</span><span class="s1">&#39;trachurus&#39;</span><span class="p">,</span><span class="s1">&#39;horse mackerel&#39;</span><span class="p">,</span><span class="s1">&#39;roundfish&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;Thysanoessa&#39;</span><span class="p">,</span><span class="s1">&#39;inermis&#39;</span><span class="p">,</span><span class="s1">&#39;krill&#39;</span><span class="p">,</span><span class="s1">&#39;crustacean&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;Chionoecetes&#39;</span><span class="p">,</span><span class="s1">&#39;opilio&#39;</span><span class="p">,</span><span class="s1">&#39;snow crab&#39;</span><span class="p">,</span><span class="s1">&#39;crustacean&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;Oncorhynchus&#39;</span><span class="p">,</span><span class="s1">&#39;tshawytscha&#39;</span><span class="p">,</span><span class="s1">&#39;chinook salmon&#39;</span><span class="p">,</span> <span class="s1">&#39;roundfish&#39;</span><span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">trials</span> <span class="k">VALUES</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2018</span><span class="p">,</span><span class="s1">&#39;Norway&#39;</span><span class="p">,</span><span class="s1">&#39;Barents Sea&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.fishres.2018.03.023&#39;</span><span class="p">,</span><span class="s1">&#39;Larsen&#39;</span><span class="p">,</span><span class="s1">&#39;roger.larsen@uit.no&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2018</span><span class="p">,</span><span class="s1">&#39;Norway&#39;</span><span class="p">,</span><span class="s1">&#39;Langenuen&#39;</span><span class="p">,</span><span class="s1">&#39;10.1371/journal.pone.0190918&#39;</span><span class="p">,</span><span class="s1">&#39;Utne-Palm&#39;</span><span class="p">,</span><span class="s1">&#39;annecu@imr.no&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2017</span><span class="p">,</span><span class="s1">&#39;Norway&#39;</span><span class="p">,</span><span class="s1">&#39;Barents Sea&#39;</span><span class="p">,</span><span class="s1">&#39;10.1139/cjfas-2017-0002&#39;</span><span class="p">,</span><span class="s1">&#39;Grimaldo&#39;</span><span class="p">,</span><span class="s1">&#39;eduardo.grimaldo@sintef.no&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2019</span><span class="p">,</span><span class="s1">&#39;Scotland&#39;</span><span class="p">,</span><span class="s1">&#39;Orkney Islands&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.fishres.2019.03.010&#39;</span><span class="p">,</span><span class="s1">&#39;ONeill&#39;</span><span class="p">,</span> <span class="s1">&#39;barone@aqua.dtu.dk&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2020</span><span class="p">,</span><span class="s1">&#39;Isle of Man&#39;</span><span class="p">,</span><span class="s1">&#39;Isle of Man territorial sea&#39;</span><span class="p">,</span><span class="s1">&#39;10.1017/S0025315420000028&#39;</span><span class="p">,</span><span class="s1">&#39;Southworth&#39;</span><span class="p">,</span><span class="s1">&#39;lucy.k.southworth@gmail.com&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2018</span><span class="p">,</span><span class="s1">&#39;Denmark&#39;</span><span class="p">,</span><span class="s1">&#39;Skagerrak&#39;</span><span class="p">,</span><span class="s1">&#39;10.1093/icesjms/fsy048&#39;</span><span class="p">,</span><span class="s1">&#39;Melli&#39;</span><span class="p">,</span><span class="s1">&#39;vmel@aqua.dtu.dk&#39;</span><span class="p">,</span><span class="s1">&#39;check paper for length distribution notes&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2014</span><span class="p">,</span><span class="s1">&#39;Sweden&#39;</span><span class="p">,</span><span class="s1">&#39;Baltic Sea&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.fishres.2014.04.012&#39;</span><span class="p">,</span><span class="s1">&#39;Bryhn&#39;</span><span class="p">,</span><span class="s1">&#39;andreas.bryhn@slu.se&#39;</span><span class="p">,</span><span class="s1">&#39;check paper for number of pots per experiment&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2020</span><span class="p">,</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span><span class="s1">&#39;Bay of Biscay&#39;</span><span class="p">,</span><span class="s1">&#39;10.3989/scimar.04975.17A&#39;</span><span class="p">,</span><span class="s1">&#39;Cuende&#39;</span><span class="p">,</span><span class="s1">&#39;elsacuende@gmail.com&#39;</span><span class="p">,</span><span class="s1">&#39;LEDs did not significantly affect the SMP’s release efficiency for any species. Increasing panel size had a significant positive effect on blue whiting, and placing the SMP in the lower panel improved hake.&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">2019</span><span class="p">,</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span><span class="s1">&#39;Bay of Biscay&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.fishres.2019.105431&#39;</span><span class="p">,</span><span class="s1">&#39;Cuende&#39;</span><span class="p">,</span><span class="s1">&#39;elsacuende@gmail.com&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2018</span><span class="p">,</span><span class="s1">&#39;Norway&#39;</span><span class="p">,</span><span class="s1">&#39;Ramfjord&#39;</span><span class="p">,</span><span class="s1">&#39;10.1093/icesjms/fsy099&#39;</span><span class="p">,</span><span class="s1">&#39;Humborstad&#39;</span><span class="p">,</span><span class="s1">&#39;oddb@hi.no&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">2017</span><span class="p">,</span><span class="s1">&#39;Canada&#39;</span><span class="p">,</span><span class="s1">&#39;Newfoundland and Labrador&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.aaf.2017.05.001&#39;</span><span class="p">,</span><span class="s1">&#39;Nguyen&#39;</span><span class="p">,</span><span class="s1">&#39;khanh.nguyen@mi.mun.ca&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">2019</span><span class="p">,</span><span class="s1">&#39;United States&#39;</span><span class="p">,</span><span class="s1">&#39;Oregon&#39;</span><span class="p">,</span><span class="s1">&#39;10.1016/j.fishres.2019.04.013&#39;</span><span class="p">,</span><span class="s1">&#39;Lomeli&#39;</span><span class="p">,</span><span class="s1">&#39;mlomeli@psmfc.org&#39;</span><span class="p">,</span><span class="k">NULL</span><span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">experiments</span> <span class="k">VALUES</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(30.167 75.500)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;bottom trawl&#39;</span><span class="p">,</span><span class="s1">&#39;nordmore grid&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;lower part of grid pointing in towing direction and downwards&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;twilight&#39;</span><span class="p">,</span><span class="mi">363</span><span class="p">,</span><span class="mi">381</span><span class="p">,</span><span class="s1">&#39;2016-11-19&#39;</span><span class="p">,</span><span class="s1">&#39;2016-11-22&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(5.517 60.050)&#39;</span><span class="p">),</span><span class="s1">&#39;lab&#39;</span><span class="p">,</span><span class="s1">&#39;tank&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;unknown&#39;</span><span class="p">,</span><span class="s1">&#39;right wall&#39;</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;2016-02-01&#39;</span><span class="p">,</span><span class="s1">&#39;2016-03-31&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(30.133 70.483)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;bottom trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;4 at centre of square mesh and 4 attached to selvedges&#39;</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">46</span><span class="p">,</span><span class="mi">410</span><span class="p">,</span><span class="s1">&#39;2016-02-29&#39;</span><span class="p">,</span><span class="s1">&#39;2016-03-09&#39;</span><span class="p">),</span>	
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-3.000 59.000)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;demersal prawn trawl&#39;</span><span class="p">,</span><span class="s1">&#39;separator panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED lightline&#39;</span><span class="p">,</span><span class="s1">&#39;PhotoSynergy Ltd PSL5000&#39;</span><span class="p">,</span><span class="s1">&#39;leading edge of separator panel&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">85</span><span class="p">,</span><span class="s1">&#39;2014-09-01&#39;</span><span class="p">,</span><span class="s1">&#39;2014-09-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-3.000 59.000)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;demersal prawn trawl&#39;</span><span class="p">,</span><span class="s1">&#39;separator panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED lightline&#39;</span><span class="p">,</span><span class="s1">&#39;PhotoSynergy Ltd PSL5000&#39;</span><span class="p">,</span><span class="s1">&#39;leading edge of separator panel at reduced height and centre section of fishing line&#39;</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;nighttime&#39;</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">85</span><span class="p">,</span><span class="s1">&#39;2015-03-01&#39;</span><span class="p">,</span><span class="s1">&#39;2015-03-31&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-4.400 54.200)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;otter trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;SafetyNet Technologies&#39;</span><span class="p">,</span><span class="s1">&#39;attached to square mesh panel as 2x3&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="s1">&#39;2017-06-01&#39;</span><span class="p">,</span><span class="s1">&#39;2017-08-31&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-5.000 54.000)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;otter trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;SafetyNet Technologies&#39;</span><span class="p">,</span><span class="s1">&#39;attached to square mesh panel as 2x3&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="s1">&#39;2017-06-01&#39;</span><span class="p">,</span><span class="s1">&#39;2017-08-31&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(9.932 58.352)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;combi trawl&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;lower netting panel in aft part of tapered section&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">86</span><span class="p">,</span><span class="s1">&#39;2016-09-05&#39;</span><span class="p">,</span><span class="s1">&#39;2016-09-29&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(9.932 58.352)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;combi trawl&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;upper netting panel in aft part of tapered section&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">45</span><span class="p">,</span><span class="mi">86</span><span class="p">,</span><span class="s1">&#39;2016-09-05&#39;</span><span class="p">,</span><span class="s1">&#39;2016-09-29&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(15.320 56.045)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;pot&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Artisan Fisheries&#39;</span><span class="p">,</span><span class="s1">&#39;by the bait bag inthe middle of the pot&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;2009-04-01&#39;</span><span class="p">,</span><span class="s1">&#39;2010-07-31&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(14.900 55.800)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;pot&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Artisan Fisheries&#39;</span><span class="p">,</span><span class="s1">&#39;by the bait bag inthe middle of the pot&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">43</span><span class="p">,</span><span class="mi">43</span><span class="p">,</span><span class="s1">&#39;2010-06-01&#39;</span><span class="p">,</span><span class="s1">&#39;2010-11-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-1.650 43.800)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;bottom trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;unknown&#39;</span><span class="p">,</span><span class="s1">&#39;upper panel of extension piece near SMP&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;daylight&#39;</span><span class="p">,</span><span class="mi">108</span><span class="p">,</span><span class="mi">122</span><span class="p">,</span><span class="s1">&#39;2018-06-01&#39;</span><span class="p">,</span><span class="s1">&#39;2018-06-15&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-1.650 43.800)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;bottom trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;unknown&#39;</span><span class="p">,</span><span class="s1">&#39;lower panel of extension piece opposite SMP&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;daylight&#39;</span><span class="p">,</span><span class="mi">108</span><span class="p">,</span><span class="mi">122</span><span class="p">,</span><span class="s1">&#39;2018-06-01&#39;</span><span class="p">,</span><span class="s1">&#39;2018-06-15&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-2.205 43.400)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;bottom trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh panel&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;CENTRO Power Light SW2&#39;</span><span class="p">,</span><span class="s1">&#39;over the SMP to attract fish towards the panel and increase contact probability&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="mi">106</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="s1">&#39;2017-06-08&#39;</span><span class="p">,</span><span class="s1">&#39;2017-06-19&#39;</span><span class="p">),</span>	
+    <span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(19.347 69.323)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;pot&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Artisan Fisheries&#39;</span><span class="p">,</span><span class="s1">&#39;by the bait bag inthe middle of the pot&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;nighttime&#39;</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">124</span><span class="p">,</span><span class="s1">&#39;2016-09-01&#39;</span><span class="p">,</span><span class="s1">&#39;2016-09-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(19.347 69.323)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;pot&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Brinyte DIV01&#39;</span><span class="p">,</span><span class="s1">&#39;hanging centrally from the roof in the upper chamber of the pot pointing towards the bait bag&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;nighttime&#39;</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">124</span><span class="p">,</span><span class="s1">&#39;2016-09-01&#39;</span><span class="p">,</span><span class="s1">&#39;2016-09-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-52.679 47.588)&#39;</span><span class="p">),</span><span class="s1">&#39;lab&#39;</span><span class="p">,</span><span class="s1">&#39;tank&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;suspended at the end of the pool tank in a vertically oriented 64 mm diameter black PVC tube to limit light emitted. The light aligned with a 22 mm diameter hole that was 20 cm from the tank floor to create a small focused light pattern with the source approximately 2.3 m from the cage&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;2016-01-28&#39;</span><span class="p">,</span><span class="s1">&#39;2016-02-19&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-52.200 47.200)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;trap&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;inside trap with 453 g of mixed squid and herring in a perforated plastic jar&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">165</span><span class="p">,</span><span class="mi">173</span><span class="p">,</span><span class="s1">&#39;2016-04-26&#39;</span><span class="p">,</span><span class="s1">&#39;2016-05-23&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-48.000 46.000)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;trap&#39;</span><span class="p">,</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span><span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;inside trap with no bait&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;both&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="s1">&#39;2016-05-01&#39;</span><span class="p">,</span><span class="s1">&#39;2016-06-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-124.370 44.195)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;midwater trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh ramp to escape window&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span> <span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;illuminating specific windows: 8 LED clusters along a forward escape window or 6 LED clusters along an aft escape window&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">195</span><span class="p">,</span><span class="s1">&#39;2015-09-01&#39;</span><span class="p">,</span><span class="s1">&#39;2015-09-30&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="n">GeomFromText</span><span class="p">(</span><span class="s1">&#39;POINT(-124.290 44.350)&#39;</span><span class="p">),</span><span class="s1">&#39;sea&#39;</span><span class="p">,</span><span class="s1">&#39;midwater trawl&#39;</span><span class="p">,</span><span class="s1">&#39;square mesh ramp to escape window&#39;</span><span class="p">,</span><span class="s1">&#39;LED&#39;</span><span class="p">,</span> <span class="s1">&#39;Lindgren-Pitman Electralume&#39;</span><span class="p">,</span><span class="s1">&#39;all windows: 7 LED clusters on each forward escape window and 5 LED clusters on each aft escape window&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;daytime&#39;</span><span class="p">,</span><span class="mi">135</span><span class="p">,</span><span class="mi">195</span><span class="p">,</span><span class="s1">&#39;2017-05-01&#39;</span><span class="p">,</span><span class="s1">&#39;2017-11-30&#39;</span><span class="p">);</span>
+
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">results</span> <span class="k">VALUES</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">448</span><span class="p">,</span><span class="mi">560</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">448</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">505</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;erratic escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">13</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards seabed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards seabed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">17</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards seabed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">18</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards seabed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards seabed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">530</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">22</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">23</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">27</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">29</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">31</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;away&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">33</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">34</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">35</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">36</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">37</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">38</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">39</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;away&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">40</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">41</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">540</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;away&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">42</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">523</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">43</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">523</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">44</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">45</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">46</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">47</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">48</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">465</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">49</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">465</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">465</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;erratic escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">51</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">523</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">52</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">53</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">54</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">425</span><span class="p">,</span><span class="mi">750</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">55</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">456</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">56</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">464</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">57</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">58</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="mi">632</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">59</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="mi">446</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;away&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">456</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">61</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="mi">446</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">62</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">464</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">63</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="mi">519</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;white&#39;</span><span class="p">,</span><span class="mi">456</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;towards&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">65</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="mi">632</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">66</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="s1">&#39;target&#39;</span><span class="p">,</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span><span class="mi">446</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">FALSE</span><span class="p">,</span><span class="s1">&#39;negligible&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">67</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">464</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="mi">68</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="s1">&#39;bycatch&#39;</span><span class="p">,</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span><span class="mi">464</span><span class="p">,</span><span class="k">NULL</span><span class="p">,</span><span class="k">TRUE</span><span class="p">,</span><span class="s1">&#39;escape&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>I will write a data upload interface for new studies. MySQL saves databases as csv files.
+If we needed to relocate or resurrect in any way, we would load and read csv files directly, rather than write screeds of INSERT INTO lines.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./mimir"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="../landing-page.html" title="previous page">SafetyNet Technologies data analytics manifesto</a>
+    <a class='right-next' id="next-link" href="../power/trialpower.html" title="next page">How many trawls do we need to sample to make sure we can detect a biologically important effect?</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Craig Syms<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
